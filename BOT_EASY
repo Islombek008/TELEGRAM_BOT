@@ -1,0 +1,37 @@
+from aiogram import Bot, dispatcher, executor, types
+import wikipedia
+
+BOT_TOKEN = ""
+wikipedia.set_lang('uz')
+bot = Bot(BOT_TOKEN)
+dp = dispatcher(bot)
+
+
+@dp.message_handler(commands=['start'])
+async def start_handlar(msg: types.Message):
+    awit msg.answer(f"Salom. {msg.from_user.full_name}!!!")
+
+
+
+@dp.message_handler(commands=['help'])
+async def help_handler(msg: types.message):
+    await msg.reply('Qanday yordam kerak? \nAdminga murojat qiling!!!!\n https://t.me/the_islomwik')
+
+
+# dp.message_hendler()
+# async def echo_handlar(msg: types.Message):
+#     await msg.answer(msg.txt)
+
+
+@dp.message_handler()
+async def wikipedia_handler(msg: types.Message):
+    try:
+        respons = wikipedia.summary(msg.text)
+        await msg.reply(respons)
+    except:
+        await msg.reply("Bunday maqola yoq!")
+
+
+
+if __name__ == "__main__":
+    executor.start_polling(dp, skip_updates=True)
